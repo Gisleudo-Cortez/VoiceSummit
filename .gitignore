@@ -1,0 +1,34 @@
+# --- Python Bytecode and Caches ---
+# Ignores compiled python files and caches, which are generated automatically.
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# --- Build Artifacts ---
+# Ignores directories created when building or distributing the package.
+build/
+dist/
+*.egg-info/
+
+# --- Virtual Environments ---
+# Ignores the virtual environment directory.
+.venv/
+venv/
+env/
+
+# --- Secrets ---
+# CRITICAL: Ignores the .env file which contains sensitive API keys.
+# This file should NEVER be committed to version control.
+.env
+
+# --- User Data & Input ---
+# Ignores directories containing user-provided audio files and generated data.
+# These are specific to a user's run and are not part of the source code.
+/input_audio/
+/data/
+
+# --- Local Environment Configuration ---
+# Ignores files that specify a local Python version for tools like pyenv.
+.python-version

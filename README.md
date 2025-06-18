@@ -43,7 +43,7 @@ voice_processing/
 
 1.  **Clone the Repository**
     ```bash
-    git clone <your-repository-url>
+    git clone https://github.com/Gisleudo-Cortez/VoiceSummit.git
     cd voice_processing
     ```
 
