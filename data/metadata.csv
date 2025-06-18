@@ -1,0 +1,16 @@
+CREATED,AUDIO_FILE_PATH,TRANSCRIPTION,SUMMARY
+2025-06-18T12:27:13.106920+00:00,/home/nero/Documents/Estudos/Python/voice_processing/input_audio/test_1.wav,"Hello, one two and this is a test. If you can understand this, write OK.","<think>
+Alright, I just received a query from a user asking me to summarize some text into bullet points. The text they provided is: ""Hello, one two and this is a test. If you can understand this, write OK."" Hmm, okay, so first, I need to break down what exactly the user is looking for.
+
+Let me parse their message carefully. They start with ""Hello,"" which is straightforward. Then it says ""one two and this is a test."" That part sounds like a simple phrase, maybe just testing if the system can understand it. The next sentence is ""If you can understand this, write OK."" So, they're instructing me to respond with ""OK"" once I get their message.
+
+I think the user wants me to process this text and present it in bullet points. They might be checking if I can follow simple instructions or perhaps testing my ability to summarize. Since the text is brief, I should identify each key part and list them concisely.
+
+Breaking it down, ""Hello"" is a greeting. Then ""one two"" could be numbers or just a phrase. The rest seems like a test message. Lastly, they're asking for an OK if understood. So, structuring these points into bullets makes sense.
+
+I should ensure that each bullet captures the essence without being too wordy. Maybe split it into clear sections: Greeting, Content, and Instruction. That way, it's easy to read and covers all parts of their message.
+</think>
+
+- **Greeting:** Hello  
+- **Content:** One two and this is a test.  
+- **Instruction:** If you can understand this, write OK."

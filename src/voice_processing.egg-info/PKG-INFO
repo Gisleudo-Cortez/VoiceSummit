@@ -1,0 +1,29 @@
+Metadata-Version: 2.4
+Name: voice-processing
+Version: 0.1.0
+Summary: A pipeline to automatically transcribe and summarize audio files using local or API-based LLMs.
+Requires-Python: <3.13,>=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: openai>=1.88.0
+Requires-Dist: python-dotenv>=1.1.0
+Requires-Dist: requests>=2.32.4
+Requires-Dist: typer[all]>=0.16.0
+Requires-Dist: watchdog>=6.0.0
+Provides-Extra: api
+Requires-Dist: openai>=1.88.0; extra == "api"
+Provides-Extra: local
+Requires-Dist: openai-whisper>=20240930; extra == "local"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.4.1; extra == "dev"
+
+# Voice Processing Pipeline
+
+This project provides a pipeline to automatically transcribe audio files and summarize their content using large language models (LLMs). It includes a background watcher that processes new audio files and a CLI tool to query the transcriptions and summaries. The system can operate entirely locally (using open-source models like Whisper and Llama via Ollama) or leverage OpenAI APIs for Whisper and GPT-4.
+
+## Features
+
+- **Automatic Directory Monitoring:** The pipeline watches an `input_audio/` directory for new `.wav` or `.mp3` files and processes them on the fly.
+- **Speech-to-Text Transcription:** Uses OpenAI's Whisper model (locally via `whisper.cpp`/`openai-whisper` or via OpenAI’s API) to transcribe audio files to text.
+- **Text Summarization:** Generates concise summaries of the transcripts using either a local Llama-family model (via the Ollama server) or OpenAI's GPT-4 API.
+- **Data Logging:** Saves each transcription and summary, along with timestamps and file paths, to `data/metadata.csv` for record-keeping.
+- **CLI Tool:** A convenient command-line interface (using Typer) to check status, view transcripts, ask questions about the content, and generate action plans from the collected transcripts. The CLI supports an optional `--use-api` flag to switch between local and API-backed LLMs.

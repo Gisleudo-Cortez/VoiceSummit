@@ -1,0 +1,14 @@
+openai>=1.88.0
+python-dotenv>=1.1.0
+requests>=2.32.4
+typer[all]>=0.16.0
+watchdog>=6.0.0
+
+[api]
+openai>=1.88.0
+
+[dev]
+pytest>=8.4.1
+
+[local]
+openai-whisper>=20240930
