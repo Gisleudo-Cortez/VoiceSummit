@@ -67,6 +67,21 @@ class AudioHandler(PatternMatchingEventHandler):
                     self.processed_files.remove(file_path)
 
 
+def process_existing_files(watch_dir: str, handler: "AudioHandler"):
+    """Process any audio files that were missed while the watcher was not running."""
+    typer.echo("Checking for unprocessed files...")
+    processed_paths = storage.get_processed_files()
+    found_unprocessed = False
+    for filename in os.listdir(watch_dir):
+        if filename.endswith((".wav", ".mp3")):
+            file_path = os.path.abspath(os.path.join(watch_dir, filename))
+            if file_path not in processed_paths:
+                found_unprocessed = True
+                typer.echo(f"Found unprocessed file: {filename}")
+                handler.process_event(file_path)
+    if not found_unprocessed:
+        typer.echo("No unprocessed files found.")
+
 @app.command()
 def watch(
     watch_dir: str = typer.Argument(
@@ -92,8 +107,12 @@ def watch(
     typer.echo(f"Starting watcher in {mode} mode.")
     typer.echo(f"Watching directory: {abs_watch_dir} (Press Ctrl+C to stop)")
 
-    observer = Observer()
     handler = AudioHandler(use_api=use_api)
+    
+    # Process any files that were missed
+    process_existing_files(abs_watch_dir, handler)
+
+    observer = Observer()
     observer.schedule(handler, abs_watch_dir, recursive=False)
     observer.start()
 

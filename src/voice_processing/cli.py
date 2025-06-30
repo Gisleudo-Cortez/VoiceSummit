@@ -1,6 +1,9 @@
 import os
 import typer
 from typing_extensions import Annotated
+from rich.console import Console
+from rich.spinner import Spinner
+from rich.table import Table
 from . import storage, config, llm_clients
 
 # Create a Typer app instance
@@ -65,6 +68,8 @@ def _generate_plan(ctx: typer.Context) -> str:
         prompt = f"Read the following transcripts and extract a list of actionable tasks or next steps. Provide a plan with bullet points.\n\nTranscripts:\n{context_text}\n\nAction Plan:"
         return llm_clients.generate_text(config.OLLAMA_MODEL, prompt)
 
+from rich.table import Table
+
 @app.command()
 def status():
     """Show a summary of processed audio files."""
@@ -72,12 +77,21 @@ def status():
     if not records:
         typer.echo("No audio files have been processed yet.")
         return
+
     count = len(records)
     typer.secho(f"Total files processed: {count}", fg=typer.colors.BLUE)
-    # Show last 5
-    for i, rec in enumerate(records[-5:], 1):
+
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("Index", style="dim", width=5)
+    table.add_column("File Name")
+    table.add_column("Created Date", justify="right")
+
+    # Show last 10 records
+    for i, rec in enumerate(records[-10:], 1):
         fname = os.path.basename(rec["AUDIO_FILE_PATH"])
-        typer.echo(f"{count - 5 + i}. {fname} ({rec['CREATED']})")
+        table.add_row(str(len(records) - 10 + i), fname, rec["CREATED"])
+
+    console.print(table)
 
 @app.command()
 def show(identifier: Annotated[str, typer.Argument(help="Index (e.g., '1') or partial filename of the record to show. Shows the latest if omitted.")] = None):
@@ -110,17 +124,21 @@ def show(identifier: Annotated[str, typer.Argument(help="Index (e.g., '1') or pa
     typer.echo(rec_to_show["SUMMARY"])
 
 
+console = Console()
+
 @app.command()
 def ask(ctx: typer.Context, question: Annotated[str, typer.Argument(help="Question to ask about the transcripts.")]):
     """Ask a question about the content of all processed transcripts."""
-    answer = _answer_question(ctx, question)
+    with console.status("[bold green]Thinking...", spinner="dots"):
+        answer = _answer_question(ctx, question)
     typer.echo(answer)
 
 
 @app.command()
 def plan(ctx: typer.Context):
     """Generate an action plan from all processed transcripts."""
-    plan_text = _generate_plan(ctx)
+    with console.status("[bold green]Generating plan...", spinner="dots"):
+        plan_text = _generate_plan(ctx)
     typer.echo(plan_text)
 
 
@@ -142,7 +160,7 @@ def main(
     ctx.obj = AppState(use_api=use_api)
 
     if ctx.invoked_subcommand is None:
-        typer.echo("Welcome to the Voice Processing CLI! Use --help to see commands.")
+        ctx.invoke(status)
 
 if __name__ == "__main__":
     app()
