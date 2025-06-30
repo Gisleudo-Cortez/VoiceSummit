@@ -11,7 +11,16 @@ def append_record(timestamp: str, file_path: str, transcription: str, summary: s
         if not file_exists:
             writer.writerow(["CREATED", "AUDIO_FILE_PATH", "TRANSCRIPTION", "SUMMARY"])
         writer.writerow([timestamp, file_path, transcription, summary])
+def get_records():
+    """Return a list of all transcription records from the metadata CSV file."""
+    if not os.path.exists(config.METADATA_FILE):
+        return []
+    with open(config.METADATA_FILE, "r", newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        return list(reader)
+
 def get_processed_files():
     """Return a set of all audio file paths that have been processed."""
     records = get_records()
     return {rec["AUDIO_FILE_PATH"] for rec in records}
+
